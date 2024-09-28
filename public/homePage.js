@@ -2,7 +2,7 @@
 const logout = new LogoutButton();
 logout.action = () => {
     ApiConnector.logout(response => {
-        if (response) {
+        if (response.success) {
             location.reload();
         } 
     });
@@ -11,7 +11,7 @@ logout.action = () => {
 // Получение информации о пользователе
 
 ApiConnector.current(response => {
-    if (response) {
+    if (response.success) {
         ProfileWidget.showProfile(response.data);
     } 
 })
@@ -21,14 +21,15 @@ ApiConnector.current(response => {
 const ratesBoard = new RatesBoard();
 function getCourses(){
     ApiConnector.getStocks(response => {
-        if(response){
-            ratesBoard.clearTable;
+        if(response.success){
+            ratesBoard.clearTable();
             ratesBoard.fillTable(response.data);
             }
         }
     )
 }
-setInterval(getCourses(), 60000);
+getCourses();
+setInterval(getCourses,60000);
 
 // Операции с деньгами
 
@@ -83,9 +84,9 @@ favoritesWidget.addUserCallback = ({ id, name }) => {
             favoritesWidget.clearTable();
             favoritesWidget.fillTable(response.data);
             moneyManager.updateUsersList(response.data);
-            moneyManager.setMessage(response.success, "Здорово, теперь у Вас на одного друга больше!");
+            favoritesWidget.setMessage(response.success, "Здорово, теперь у Вас на одного друга больше!");
         } else {
-            moneyManager.setMessage(response.success, response.error);
+            favoritesWidget.setMessage(response.success, response.error);
         }
     })
 };
@@ -96,9 +97,9 @@ favoritesWidget.removeUserCallback = (id) => {
             favoritesWidget.clearTable();
             favoritesWidget.fillTable(response.data);
             moneyManager.updateUsersList(response.data);
-            moneyManager.setMessage(response.success, "Ну и правильно, значит этот человек больше не нужен Вам в списке друзей");
+            favoritesWidget.setMessage(response.success, "Ну и правильно, значит этот человек больше не нужен Вам в списке друзей");
         } else {
-            moneyManager.setMessage(response.success, response.error);
+            favoritesWidget.setMessage(response.success, response.error);
         }
     })
 }
