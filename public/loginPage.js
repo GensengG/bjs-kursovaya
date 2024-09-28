@@ -3,8 +3,7 @@
 const userForm = new UserForm();
 userForm.registerFormCallback = data => {
     ApiConnector.register(data, response => {
-      let resultId = response.userId;
-      if(resultId > 0){
+      if(response.userId){
           location.reload();
       } else {
       userForm.setLoginErrorMessage(response.error);
@@ -14,8 +13,7 @@ userForm.registerFormCallback = data => {
 
 userForm.loginFormCallback = data => {
   ApiConnector.login(data, response => {
-    let resultId = response.userId;
-    if(resultId > 0){
+    if(response.userId){
         location.reload();
     } else {
         userForm.setLoginErrorMessage(response.error);
